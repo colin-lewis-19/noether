@@ -1,6 +1,7 @@
 #include <ros/ros.h>
 #include <mesh_segmenter/convex_hull.h>
 #include <noether_msgs/GenerateConvexHull.h>	
+#include <iostream>
   
 bool executeCB(noether_msgs::GenerateConvexHull::Request& req, noether_msgs::GenerateConvexHull::Response& res)
   {
@@ -13,6 +14,7 @@ bool executeCB(noether_msgs::GenerateConvexHull::Request& req, noether_msgs::Gen
      outMeshFileName.append(modifier);
 
      //step 2: Call library
+     cout << "we're trya saave to :"<< outMeshFileName <<endl;
   	 bool success = ch_gen.generate_ch(inMeshFileName,outMeshFileName);
 
   	 return true;
@@ -25,4 +27,5 @@ int main(int argc, char **argv)
 
   ros::ServiceServer service = nh.advertiseService("convex_hull_generation", executeCB);
   ros::spin();
+  //of note: Will fail if old, previously functioning code is copy-pasted into this file
 }
