@@ -9,12 +9,12 @@ bool executeCB(noether_msgs::GenerateConvexHull::Request& req, noether_msgs::Gen
 
      //step 1: Read in file
   	 string inMeshFileName = req.file_in; //expects a path to file
-     string modifier = "_chullt.ply";
+     string modifier = "_chull.ply";
      string outMeshFileName = inMeshFileName.substr(0, inMeshFileName.size()-4);
      outMeshFileName.append(modifier);
 
      //step 2: Call library
-     cout << "we're trya saave to :"<< outMeshFileName <<endl;
+     cout << "saving to:"<< outMeshFileName <<endl;
   	 bool success = ch_gen.generate_ch(inMeshFileName,outMeshFileName);
 
   	 return true;
