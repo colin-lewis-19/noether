@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   cmake_modules
   mesh_segmenter
   noether_conversions
+  noether_filtering
   noether_msgs
   path_sequence_planner
   pcl_conversions
@@ -29,6 +30,8 @@ catkin_package(
   CATKIN_DEPENDS
     actionlib
     mesh_segmenter
+    noether_conversions
+    noether_filtering
     noether_msgs
     path_sequence_planner
     pcl_conversions
@@ -72,6 +75,14 @@ add_executable(convex_hull_node
 )
 
 target_link_libraries(convex_hull_node  
+  ${catkin_LIBRARIES}
+  ${VTK_LIBRARIES}
+)
+
+add_executable(mesh_filter_server
+  src/mesh_filter_server.cpp
+)
+target_link_libraries(mesh_filter_server
   ${catkin_LIBRARIES}
   ${VTK_LIBRARIES}
 )
