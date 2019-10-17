@@ -8,15 +8,13 @@ bool executeCB(noether_msgs::GenerateConvexHull::Request& req, noether_msgs::Gen
   	ConvexHullGenerator ch_gen;
 
      //step 1: Read in file
-  	 string inMeshFileName = req.file_in; //expects a path to file
-     string modifier = "_chull.ply";
-     string outMeshFileName = inMeshFileName.substr(0, inMeshFileName.size()-4);
+     std::string inMeshFileName = req.file_in; //expects a path to file
+     std::string modifier = "_chullt.ply";
+     std::string outMeshFileName = inMeshFileName.substr(0, inMeshFileName.size()-4);
      outMeshFileName.append(modifier);
 
      //step 2: Call library
-     cout << "saving to:"<< outMeshFileName <<endl;
-  	 bool success = ch_gen.generate_ch(inMeshFileName,outMeshFileName);
-
+     bool success = ch_gen.generateCH(inMeshFileName,outMeshFileName);
   	 return true;
   }
 
@@ -27,5 +25,4 @@ int main(int argc, char **argv)
 
   ros::ServiceServer service = nh.advertiseService("convex_hull_generation", executeCB);
   ros::spin();
-  //of note: Will fail if old, previously functioning code is copy-pasted into this file
 }
