@@ -56,7 +56,7 @@ void ConvexHullGenerator::cleanMesh(const pcl::PointCloud<pcl::PointXYZ>& outMes
 bool ConvexHullGenerator::saveMesh(const pcl::PointCloud<pcl::PointXYZ>& outMesh, pcl::PolygonMesh& outMeshPoly, const std::string& outfile)
 {
   pcl::toPCLPointCloud2(outMesh, outMeshPoly.cloud);
-  pcl::io::savePolygonFile("/tmp/mesh.stl", outMeshPoly, false);
+  pcl::io::savePolygonFile("/tmp/mesh.ply", outMeshPoly, false);
   return true;
 }
 
