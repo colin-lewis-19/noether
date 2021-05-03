@@ -55,6 +55,7 @@ The following plugins are currently available and are listed by filter data type
 - `noether_filtering::mesh::CleanData`
 - `noether_filtering::mesh::WindowedSincSmoothing`
 - `noether_filtering::mesh::FillHoles`
+- `noether_filtering::mesh::TrimEdges`
 
 > Note: PCL 1.9 and VTK 8.2 are required to compile the mesh filtering plugins. If these system dependencies do not exist, the mesh filtering plugins will not be built
 
