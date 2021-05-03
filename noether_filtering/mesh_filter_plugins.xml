@@ -29,6 +29,12 @@
       more details
     </description>
   </class>
+  <class name="noether_filtering/TrimEdges" type="noether_filtering::mesh::TrimEdges"
+    base_class_type="noether_filtering::mesh::MeshFilterBase">
+    <description>
+      removes all faces associated with boundaries, runs over mesh num_passes 
+    </description>
+  </class>
   <class name="noether_filtering/FillHoles" type="noether_filtering::mesh::FillHoles"
     base_class_type="noether_filtering::mesh::MeshFilterBase">
     <description>

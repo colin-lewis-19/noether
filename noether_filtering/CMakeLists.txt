@@ -77,6 +77,7 @@ if(${BUILD_MESH_PLUGINS})
       src/mesh/clean_data.cpp
       src/mesh/fill_holes.cpp
       src/mesh/windowed_sinc_smoothing.cpp
+      src/mesh/trim_edges.cpp
       )
   set(MESH_FILTERS_COMPILE_DEFINITIONS "")
 
