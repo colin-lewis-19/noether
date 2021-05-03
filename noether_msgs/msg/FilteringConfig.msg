@@ -17,3 +17,6 @@ float64 laplacian_relaxation_factor
 float64 laplacian_edge_angle
 bool laplacian_edge_smoothing
 bool laplacian_boundary_smoothing
+
+# Parameters for the EdgeTrimmingFilter
+int32 num_edge_trimming_passes
