@@ -771,7 +771,6 @@ ToolPath sortAndSegment(std::list<std::tuple<double, Eigen::Isometry3d, int>>& w
     {  // skip unless last in list, significantly spaced from last waypoint, but not too far
       if (q == waypoint_list.size() - 1 && dot_spacing > .3 * point_spacing && cart_spacing < 1.3 * point_spacing)
       {
-        // seg.push_back(waypoint);  // keep the last on regardless of distance to proces up to the defined edges
         last_dot = std::get<0>(waypoint_tuple);
       }
     }
