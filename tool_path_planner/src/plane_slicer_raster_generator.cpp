@@ -421,9 +421,10 @@ static tool_path_planner::ToolPaths convertToPoses(const std::vector<RasterConst
         polydata->GetPoint(idx, p.data());
         polydata->GetPoint(idx_next, p_next.data());
         polydata->GetPointData()->GetNormals()->GetTuple(idx, vz.data());
+        vz.normalize();
         vx = (p_next - p).normalized();
         vy = vz.cross(vx).normalized();
-        vz = vx.cross(vy).normalized();
+        vx = vy.cross(vz).normalized();
         pose = Translation3d(p) * AngleAxisd(computeRotation(vx, vy, vz));
         raster_path_segment.push_back(pose);
       }

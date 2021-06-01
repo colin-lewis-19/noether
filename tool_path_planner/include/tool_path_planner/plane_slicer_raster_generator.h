@@ -47,7 +47,7 @@ class PlaneSlicerRasterGenerator : public PathGenerator
   static constexpr double DEFAULT_SEARCH_RADIUS = 0.01;
   static constexpr double DEFAULT_MIN_HOLE_SIZE = 1e-2;
   static constexpr bool DEFAULT_RASTER_WRT_GLOBAL_AXES = false;
-  static constexpr bool DEFAULT_GENERATE_EXTRA_RASTERS = true;
+  static constexpr bool DEFAULT_GENERATE_EXTRA_RASTERS = false;
 
 public:
   struct Config

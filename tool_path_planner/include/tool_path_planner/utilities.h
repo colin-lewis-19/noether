@@ -146,7 +146,9 @@ ToolPaths reverseOddRasters(const ToolPaths& tool_paths, RasterStyle raster_styl
 double computeOffsetSign(const ToolPathSegment& adjusted_segment, const ToolPathSegment& away_from_segment);
 
 ToolPath splitByAxes(const ToolPathSegment& tool_path_segment);
-ToolPath splitByAxes(const ToolPathSegment& tool_path_segment, const Eigen::Vector3f& axis_1, const Eigen::Vector3f& axis_2);
+ToolPath splitByAxes(const ToolPathSegment& tool_path_segment,
+                     const Eigen::Vector3f& axis_1,
+                     const Eigen::Vector3f& axis_2);
 ToolPaths splitByAxes(const ToolPaths& tool_paths);
 ToolPaths splitByAxes(const ToolPaths& tool_paths, const Eigen::Vector3f& axis_1, const Eigen::Vector3f& axis_2);
 

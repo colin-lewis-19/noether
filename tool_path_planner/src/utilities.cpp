@@ -10,7 +10,7 @@
 #include <limits>
 #include <cmath>
 #include <numeric>
-#include <algorithm> // std::sort
+#include <algorithm>  // std::sort
 
 #include <Eigen/Core>
 #include <vtkParametricFunctionSource.h>
@@ -60,7 +60,8 @@ void flipPointOrder(ToolPath& path)
       p *= Eigen::AngleAxisd(M_PI, Eigen::Vector3d::UnitZ());
 }
 
-tool_path_planner::ToolPathSegmentData toToolPathSegmentData(const tool_path_planner::ToolPathSegment& tool_path_segment)
+tool_path_planner::ToolPathSegmentData
+toToolPathSegmentData(const tool_path_planner::ToolPathSegment& tool_path_segment)
 {
   using namespace Eigen;
 
@@ -257,6 +258,7 @@ bool toPlaneSlicerConfig(PlaneSlicerRasterGenerator::Config& config,
   config.min_segment_size = config_msg.min_segment_size;
   config.raster_rot_offset = config_msg.raster_rot_offset;
   config.raster_wrt_global_axes = config_msg.raster_wrt_global_axes;
+  config.generate_extra_rasters = config_msg.generate_extra_rasters;
 
   // Check that the raster direction was set; we are not interested in direction [0,0,0]
   Eigen::Vector3d test_raster_direction;
@@ -516,7 +518,7 @@ ToolPath splitByAxes(const ToolPathSegment& tool_path_segment)
 
   // Get major and middle axis (we don't care about minor axis)
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud = boost::make_shared<pcl::PointCloud<pcl::PointXYZ>>();
-  for (Eigen::Isometry3d p: tool_path_segment)
+  for (Eigen::Isometry3d p : tool_path_segment)
   {
     pcl::PointXYZ point(float(p.translation().x()), float(p.translation().y()), float(p.translation().z()));
     cloud->push_back(point);
@@ -525,7 +527,7 @@ ToolPath splitByAxes(const ToolPathSegment& tool_path_segment)
   moment.setInputCloud(cloud);
   moment.compute();
   Eigen::Vector3f major_axis, middle_axis, minor_axis;
-  if(!moment.getEigenVectors(major_axis, middle_axis, minor_axis))
+  if (!moment.getEigenVectors(major_axis, middle_axis, minor_axis))
   {
     ROS_ERROR_STREAM("Could not compute Eigen Vectors.");
   }
@@ -538,7 +540,9 @@ ToolPath splitByAxes(const ToolPathSegment& tool_path_segment)
   return splitByAxes(tool_path_segment, major_axis, perp_axis);
 }
 
-ToolPath splitByAxes(const ToolPathSegment& tool_path_segment, const Eigen::Vector3f& axis_1, const Eigen::Vector3f& axis_2)
+ToolPath splitByAxes(const ToolPathSegment& tool_path_segment,
+                     const Eigen::Vector3f& axis_1,
+                     const Eigen::Vector3f& axis_2)
 {
   // Sanity check - tool path segment must not be empty
   if (tool_path_segment.size() == 0)
@@ -551,10 +555,7 @@ ToolPath splitByAxes(const ToolPathSegment& tool_path_segment, const Eigen::Vect
 
   ToolPath new_tool_path;
   std::vector<Eigen::Vector3f> vectors = {
-    -1 * axis_1 + -1 * axis_2,
-    -1 * axis_1 +      axis_2,
-         axis_1 +      axis_2,
-         axis_1 + -1 * axis_2
+    -1 * axis_1 + -1 * axis_2, -1 * axis_1 + axis_2, axis_1 + axis_2, axis_1 + -1 * axis_2
   };
   // Get indices to cut tool path at
   std::set<int> cut_indices;
@@ -577,7 +578,9 @@ ToolPath splitByAxes(const ToolPathSegment& tool_path_segment, const Eigen::Vect
     for (std::size_t index = 0; index < tool_path_segment.size(); ++index)
     {
       Eigen::Isometry3d p = tool_path_segment[index];
-      Eigen::Vector3f v(float(p.translation().x() - path_center[0]), float(p.translation().y() - path_center[1]), float(p.translation().z() - path_center[2]));
+      Eigen::Vector3f v(float(p.translation().x() - path_center[0]),
+                        float(p.translation().y() - path_center[1]),
+                        float(p.translation().z() - path_center[2]));
       float dot = vector.dot(v);
       if (dot > max_dot)
       {
@@ -714,7 +717,7 @@ tlist pruneList(tlist& waypoint_list, double point_spacing)
   return (new_list);
 }
 
-ToolPath sortAndSegment(std::list<std::tuple<double, Eigen::Isometry3d, int> >& waypoint_list, double point_spacing)
+ToolPath sortAndSegment(std::list<std::tuple<double, Eigen::Isometry3d, int>>& waypoint_list, double point_spacing)
 {
   ToolPath new_tool_path;
   ToolPathSegment seg;
@@ -803,8 +806,8 @@ ToolPaths addExtraWaypoints(const ToolPaths& tool_paths, double raster_spacing, 
     // end the old and start a new segment when the new point is significantly more than the point_spacing from previous
     // waypoint
     ToolPath tool_path = tool_paths[i];
-    std::list<std::tuple<double, Eigen::Isometry3d, int> > waypoint_list;  // once sorted this list will be the order of
-                                                                           // the segments
+    std::list<std::tuple<double, Eigen::Isometry3d, int>> waypoint_list;  // once sorted this list will be the order of
+                                                                          // the segments
     Eigen::Vector3d path_dir = computePathDirection(tool_path);
     ToolPathSegment sseg = tool_path[0];
     Eigen::Vector3d path_start = sseg[0].translation();
