@@ -285,7 +285,10 @@ void runExtraRasterTest(tool_path_planner::PathGenerator& planner,
 
   // Check that the number of rasters has increased by 2
   ASSERT_EQ(paths_no_extras.get().size() + 2, paths_with_extras.get().size());
-
+  vtkSmartPointer<vtkPoints> seg_start_points_no = vtkSmartPointer<vtkPoints>::New();
+  vtkSmartPointer<vtkPoints> seg_start_points_ex = vtkSmartPointer<vtkPoints>::New();
+  double pt[3];
+  
   for (tool_path_planner::ToolPath path : *paths_no_extras)
   {
     for (tool_path_planner::ToolPathSegment seg : path)
@@ -293,8 +296,17 @@ void runExtraRasterTest(tool_path_planner::PathGenerator& planner,
       double average_point_spacing = 0.;
       int n_pts = 0;
       Eigen::Isometry3d prev_waypoint = seg[0];
+      int q=0;
       for (Eigen::Isometry3d waypoint : seg)
       {
+	if(q==0)
+	  {
+	    pt[0] = waypoint.translation().x();
+	    pt[1] = waypoint.translation().y();
+	    pt[2] = waypoint.translation().z();
+	    seg_start_points_no->InsertNextPoint(pt);
+	    q++;
+	  }
         Eigen::Vector3d v = waypoint.translation() - prev_waypoint.translation();
         average_point_spacing += sqrt(v.x() * v.x() + v.y() * v.y() + v.z() * v.z());
         prev_waypoint = waypoint;
@@ -312,8 +324,18 @@ void runExtraRasterTest(tool_path_planner::PathGenerator& planner,
       double average_point_spacing = 0.;
       int n_pts = 0;
       Eigen::Isometry3d prev_waypoint = seg[0];
+      int q=0;
       for (Eigen::Isometry3d waypoint : seg)
       {
+	if(q==0)
+	  {
+	    pt[0] = waypoint.translation().x();
+	    pt[1] = waypoint.translation().y();
+	    pt[2] = waypoint.translation().z();
+	    seg_start_points_ex->InsertNextPoint(pt);
+	    q++;
+	  }
+
         Eigen::Vector3d v = waypoint.translation() - prev_waypoint.translation();
         double dist = sqrt(v.x() * v.x() + v.y() * v.y() + v.z() * v.z());
         printf("dist = %lf\n", dist);
@@ -343,6 +365,12 @@ void runExtraRasterTest(tool_path_planner::PathGenerator& planner,
   color[2] = 0.9f;
   viz.addPolyDataDisplay(mesh, color);
   viz2.addPolyDataDisplay(mesh, color);
+
+  color[0] = 0.1f;
+  color[1] = 0.1f;
+  color[2] = 0.9f;
+  viz.addPointDataDisplay(seg_start_points_no, color);
+  viz2.addPointDataDisplay(seg_start_points_ex, color);
 
   // Display surface normals
   if (DISPLAY_NORMALS)
@@ -380,7 +408,7 @@ void runExtraRasterTest(tool_path_planner::PathGenerator& planner,
   }
 
   viz.renderDisplay();
-
+  //void VTKViewer::addPointDataDisplay(vtkPoints* points, const std::vector<float>& color)
   // Display results with extra rasters
   tool_path_planner::ToolPathsData paths_with_extras_data = tool_path_planner::toToolPathsData(paths_with_extras.get());
   for (std::size_t i = 0; i < paths_with_extras_data.size(); ++i)
